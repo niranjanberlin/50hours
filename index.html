@@ -1,0 +1,2202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Advanced Deep Work Leveling System</title>
+
+<style>
+:root{
+  --bg:#05070c;
+  --panel:#0b1020;
+  --panel2:#0e1630;
+  --text:#edf4ff;
+  --muted:#8fa4c7;
+  --cyan:#45e7ff;
+  --violet:#8b5cff;
+  --gold:#ffd86b;
+  --line:rgba(69,231,255,.26);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial, Helvetica, sans-serif;
+  color:var(--text);
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(75,70,255,.18),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 0% 40%,
+      rgba(0,210,255,.12),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #04060b,
+      #070b14 70%,
+      #03050a
+    );
+}
+
+.app{
+  width:min(1180px,94vw);
+  margin:34px auto;
+}
+
+.system{
+  border:1px solid var(--line);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15,24,48,.95),
+      rgba(4,8,18,.98)
+    );
+
+  border-radius:22px;
+  overflow:hidden;
+
+  box-shadow:
+    0 0 30px rgba(69,231,255,.12);
+}
+
+/* HEADER */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+
+  padding:28px 30px;
+
+  border-bottom:1px solid var(--line);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(69,231,255,.06),
+      rgba(139,92,255,.08)
+    );
+}
+
+.eyebrow{
+  color:var(--cyan);
+  letter-spacing:.22em;
+  font-weight:800;
+  font-size:12px;
+}
+
+h1{
+  margin:8px 0;
+
+  font-size:clamp(38px,5vw,70px);
+
+  line-height:.95;
+
+  text-transform:uppercase;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.6;
+}
+
+/* RANK */
+
+.rankbox{
+  min-width:190px;
+
+  border:1px solid rgba(255,216,107,.35);
+
+  background:
+    rgba(255,216,107,.05);
+
+  border-radius:16px;
+
+  padding:18px;
+
+  text-align:center;
+}
+
+.rankbox small{
+  color:#b5c4df;
+}
+
+.rank{
+  font-size:60px;
+  font-weight:900;
+
+  color:var(--gold);
+
+  margin:5px 0;
+}
+
+.xp{
+  font-size:13px;
+}
+
+/* CONTENT */
+
+.content{
+  padding:26px;
+}
+
+/* STATS */
+
+.mission{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:12px;
+
+  margin-bottom:22px;
+}
+
+.stat{
+  background:
+    rgba(255,255,255,.025);
+
+  border:
+    1px solid rgba(143,164,199,.14);
+
+  border-radius:14px;
+
+  padding:16px;
+}
+
+.stat b{
+  display:block;
+
+  font-size:28px;
+
+  color:var(--cyan);
+}
+
+.stat span{
+  font-size:12px;
+
+  color:var(--muted);
+}
+
+/* DAYS */
+
+.days{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,1fr);
+
+  gap:14px;
+}
+
+.day{
+  border:
+    1px solid var(--line);
+
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(11,16,32,.96),
+      rgba(7,11,23,.96)
+    );
+
+  padding:16px;
+
+  min-height:400px;
+}
+
+.day h3{
+  margin:0;
+
+  font-size:22px;
+}
+
+.mode{
+  margin:5px 0 14px;
+
+  color:var(--cyan);
+
+  font-size:11px;
+
+  font-weight:800;
+
+  letter-spacing:.12em;
+}
+
+.reset .mode{
+  color:#b79cff;
+}
+
+.block{
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  padding:10px 0;
+
+  border-bottom:
+    1px solid rgba(143,164,199,.1);
+
+  font-size:13px;
+}
+
+.block span{
+  color:#c9d6ed;
+}
+
+.block strong{
+  color:#fff;
+}
+
+.bonus{
+  color:var(--gold);
+}
+
+/* CHECKBOX */
+
+.check{
+  margin-top:15px;
+
+  display:grid;
+
+  gap:10px;
+}
+
+label{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  color:#b8c6dd;
+
+  font-size:12px;
+}
+
+input[type="checkbox"]{
+  accent-color:#45e7ff;
+
+  width:17px;
+  height:17px;
+}
+
+/* PANELS */
+
+.footergrid{
+  display:grid;
+
+  grid-template-columns:
+    1.25fr .75fr;
+
+  gap:16px;
+
+  margin-top:22px;
+}
+
+.panel{
+  border:
+    1px solid var(--line);
+
+  border-radius:16px;
+
+  padding:18px;
+
+  background:
+    rgba(255,255,255,.025);
+}
+
+.panel h2{
+  margin:0 0 12px;
+
+  font-size:14px;
+
+  color:var(--cyan);
+
+  letter-spacing:.1em;
+}
+
+/* RANK SYSTEM */
+
+.ranks{
+  display:grid;
+
+  grid-template-columns:
+    repeat(7,1fr);
+
+  gap:7px;
+}
+
+.r{
+  border:
+    1px solid rgba(143,164,199,.16);
+
+  border-radius:10px;
+
+  padding:10px 6px;
+
+  text-align:center;
+
+  background:#080d19;
+}
+
+.r.active{
+  border-color:var(--gold);
+
+  box-shadow:
+    0 0 18px rgba(255,216,107,.15);
+}
+
+.r b{
+  font-size:18px;
+}
+
+.r.active b{
+  color:var(--gold);
+}
+
+.r small{
+  display:block;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  margin-top:4px;
+}
+
+/* RULES */
+
+.rule{
+  color:#cbd8ef;
+
+  line-height:1.7;
+
+  font-size:13px;
+
+  margin:0;
+}
+
+.rule strong{
+  color:#fff;
+}
+
+/* PROGRESS */
+
+.progressWrap{
+  margin-top:24px;
+
+  padding:
+    0 26px 26px;
+}
+
+.progressHead{
+  display:flex;
+
+  justify-content:space-between;
+
+  font-size:12px;
+
+  color:var(--muted);
+
+  margin-bottom:7px;
+}
+
+.bar{
+  height:14px;
+
+  background:#070b14;
+
+  border:
+    1px solid rgba(143,164,199,.16);
+
+  border-radius:999px;
+
+  overflow:hidden;
+}
+
+.bar > div{
+  height:100%;
+
+  width:0;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--cyan),
+      var(--violet)
+    );
+
+  transition:.3s;
+}
+
+/* BUTTONS */
+
+.buttons{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+
+  justify-content:center;
+
+  margin:20px 0;
+}
+
+button{
+  border:
+    1px solid rgba(69,231,255,.35);
+
+  background:#091321;
+
+  color:#eff8ff;
+
+  border-radius:11px;
+
+  padding:13px 20px;
+
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+button:hover{
+  box-shadow:
+    0 0 20px rgba(69,231,255,.2);
+
+  transform:
+    translateY(-1px);
+}
+
+.note{
+  text-align:center;
+
+  color:#8ea3c4;
+
+  font-size:12px;
+
+  margin-bottom:25px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .days{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .mission{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .footergrid{
+    grid-template-columns:1fr;
+  }
+
+  .ranks{
+    grid-template-columns:
+      repeat(4,1fr);
+  }
+
+  .topbar{
+    flex-direction:column;
+  }
+}
+
+@media(max-width:560px){
+
+  .days,
+  .mission{
+    grid-template-columns:1fr;
+  }
+
+  .ranks{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<section
+class="system"
+id="poster">
+
+<header class="topbar">
+
+<div>
+
+<div class="eyebrow">
+SYSTEM QUEST • ADVANCED DEEP WORK
+</div>
+
+<h1>
+50 HOUR<br>
+LEVEL UP
+</h1>
+
+<div class="subtitle">
+
+5 days × 10 focused hours.
+
+Reset days reduce resistance,
+not the target.
+
+</div>
+
+</div>
+
+<div class="rankbox">
+
+<small>
+CURRENT RANK
+</small>
+
+<div
+class="rank"
+id="rankText">
+
+E
+
+</div>
+
+<div
+class="xp"
+id="xpText">
+
+0 / 50 HOURS
+
+</div>
+
+</div>
+
+</header>
+
+<div class="content">
+
+<div class="mission">
+
+<div class="stat">
+
+<b>5</b>
+
+<span>
+Days
+</span>
+
+</div>
+
+<div class="stat">
+
+<b>10h</b>
+
+<span>
+Main target / day
+</span>
+
+</div>
+
+<div class="stat">
+
+<b>50h</b>
+
+<span>
+Total quest
+</span>
+
+</div>
+
+<div class="stat">
+
+<b>+5h</b>
+
+<span>
+Optional bonus
+</span>
+
+</div>
+
+</div>
+
+<div class="days">
+
+<!-- DAY 1 -->
+
+<div class="day">
+
+<h3>
+DAY 1
+</h3>
+
+<div class="mode">
+AWAKENING
+</div>
+
+<div class="block">
+<span>Morning</span>
+<strong>5h</strong>
+</div>
+
+<div class="block">
+<span>Afternoon</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+<span>Evening</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+
+<span>Night</span>
+
+<strong>
+1h +
+<span class="bonus">
+1h bonus
+</span>
+</strong>
+
+</div>
+
+<div class="check">
+
+<label>
+
+<input
+type="checkbox"
+data-hours="5">
+
+Morning cleared
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+data-hours="2">
+
+Afternoon cleared
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+data-hours="2">
+
+Evening cleared
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+data-hours="1">
+
+Night cleared
+
+</label>
+
+</div>
+
+</div>
+
+<!-- DAY 2 -->
+
+<div class="day reset">
+
+<h3>
+DAY 2
+</h3>
+
+<div class="mode">
+RESET I — CLEAN RE-ENTRY
+</div>
+
+<div class="block">
+<span>Morning</span>
+<strong>5h</strong>
+</div>
+
+<div class="block">
+<span>Afternoon</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+<span>Evening</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+
+<span>Night</span>
+
+<strong>
+1h +
+<span class="bonus">
+1h bonus
+</span>
+</strong>
+
+</div>
+
+<div class="check">
+
+<label>
+<input type="checkbox" data-hours="5">
+Morning cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="2">
+Afternoon cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="2">
+Evening cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="1">
+Night cleared
+</label>
+
+</div>
+
+</div>
+
+<!-- DAY 3 -->
+
+<div class="day">
+
+<h3>
+DAY 3
+</h3>
+
+<div class="mode">
+BREAKTHROUGH
+</div>
+
+<div class="block">
+<span>Morning</span>
+<strong>5h</strong>
+</div>
+
+<div class="block">
+<span>Afternoon</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+<span>Evening</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+
+<span>Night</span>
+
+<strong>
+1h +
+<span class="bonus">
+1h bonus
+</span>
+</strong>
+
+</div>
+
+<div class="check">
+
+<label>
+<input type="checkbox" data-hours="5">
+Morning cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="2">
+Afternoon cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="2">
+Evening cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="1">
+Night cleared
+</label>
+
+</div>
+
+</div>
+
+<!-- DAY 4 -->
+
+<div class="day reset">
+
+<h3>
+DAY 4
+</h3>
+
+<div class="mode">
+RESET II — STABILIZE
+</div>
+
+<div class="block">
+<span>Morning</span>
+<strong>5h</strong>
+</div>
+
+<div class="block">
+<span>Afternoon</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+<span>Evening</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+
+<span>Night</span>
+
+<strong>
+1h +
+<span class="bonus">
+1h bonus
+</span>
+</strong>
+
+</div>
+
+<div class="check">
+
+<label>
+<input type="checkbox" data-hours="5">
+Morning cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="2">
+Afternoon cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="2">
+Evening cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="1">
+Night cleared
+</label>
+
+</div>
+
+</div>
+
+<!-- DAY 5 -->
+
+<div class="day">
+
+<h3>
+DAY 5
+</h3>
+
+<div class="mode">
+MONARCH DAY
+</div>
+
+<div class="block">
+<span>Morning</span>
+<strong>5h</strong>
+</div>
+
+<div class="block">
+<span>Afternoon</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+<span>Evening</span>
+<strong>2h</strong>
+</div>
+
+<div class="block">
+
+<span>Night</span>
+
+<strong>
+1h +
+<span class="bonus">
+1h bonus
+</span>
+</strong>
+
+</div>
+
+<div class="check">
+
+<label>
+<input type="checkbox" data-hours="5">
+Morning cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="2">
+Afternoon cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="2">
+Evening cleared
+</label>
+
+<label>
+<input type="checkbox" data-hours="1">
+Night cleared
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footergrid">
+
+<div class="panel">
+
+<h2>
+RANK SYSTEM
+</h2>
+
+<div class="ranks">
+
+<div class="r" data-rank="E">
+
+<b>E</b>
+
+<small>
+0–4h
+</small>
+
+</div>
+
+<div class="r" data-rank="D">
+
+<b>D</b>
+
+<small>
+5–9h
+</small>
+
+</div>
+
+<div class="r" data-rank="C">
+
+<b>C</b>
+
+<small>
+10–19h
+</small>
+
+</div>
+
+<div class="r" data-rank="B">
+
+<b>B</b>
+
+<small>
+20–29h
+</small>
+
+</div>
+
+<div class="r" data-rank="A">
+
+<b>A</b>
+
+<small>
+30–39h
+</small>
+
+</div>
+
+<div class="r" data-rank="S">
+
+<b>S</b>
+
+<small>
+40–49h
+</small>
+
+</div>
+
+<div class="r" data-rank="SS">
+
+<b>SS</b>
+
+<small>
+50h
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>
+SYSTEM RULES
+</h2>
+
+<p class="rule">
+
+<strong>1.</strong>
+Morning 5h is the boss fight.
+
+<br>
+
+<strong>2.</strong>
+Reset day = same target,
+lower resistance.
+
+<br>
+
+<strong>3.</strong>
+Use 50/10 or 90/15 cycles.
+
+<br>
+
+<strong>4.</strong>
+Low energy?
+10–20 min NSDR.
+
+<br>
+
+<strong>5.</strong>
+Clear 10h before bonus hour.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="progressWrap">
+
+<div class="progressHead">
+
+<span>
+TOTAL QUEST PROGRESS
+</span>
+
+<span id="progressLabel">
+0%
+</span>
+
+</div>
+
+<div class="bar">
+
+<div id="progressBar"></div>
+
+</div>
+
+</div>
+
+</section>
+
+<div class="buttons">
+
+<button onclick="resetQuest()">
+
+Reset Quest
+
+</button>
+
+<button onclick="downloadPNG()">
+
+⬇ Download Current Rank Image
+
+</button>
+
+</div>
+
+<div class="note">
+
+Your progress is saved automatically in your browser.
+
+</div>
+
+</div>
+
+<script>
+
+/* CHECKBOXES */
+
+const checks =
+[
+...document.querySelectorAll(
+'input[type="checkbox"]'
+)
+];
+
+
+/* TOTAL HOURS */
+
+function getHours(){
+
+return checks.reduce(
+
+(sum,c)=>
+
+sum +
+
+(
+c.checked
+?
+Number(c.dataset.hours)
+:
+0
+),
+
+0
+
+);
+
+}
+
+
+/* RANK LOGIC */
+
+function getRank(h){
+
+if(h >= 50)
+return "SS";
+
+if(h >= 40)
+return "S";
+
+if(h >= 30)
+return "A";
+
+if(h >= 20)
+return "B";
+
+if(h >= 10)
+return "C";
+
+if(h >= 5)
+return "D";
+
+return "E";
+
+}
+
+
+/* UPDATE WEBSITE */
+
+function update(){
+
+const h =
+getHours();
+
+const rank =
+getRank(h);
+
+const pct =
+Math.min(
+100,
+(h / 50) * 100
+);
+
+
+/* CURRENT RANK */
+
+document
+.getElementById("rankText")
+.textContent =
+rank;
+
+
+/* HOURS */
+
+document
+.getElementById("xpText")
+.textContent =
+`${h} / 50 HOURS`;
+
+
+/* PROGRESS BAR */
+
+document
+.getElementById(
+"progressBar"
+)
+.style.width =
+pct + "%";
+
+
+document
+.getElementById(
+"progressLabel"
+)
+.textContent =
+Math.round(pct) + "%";
+
+
+/* RANK HIGHLIGHT */
+
+document
+.querySelectorAll(".r")
+.forEach(el=>{
+
+el.classList.toggle(
+
+"active",
+
+el.dataset.rank === rank
+
+);
+
+});
+
+
+/* SAVE */
+
+localStorage.setItem(
+
+"deepWorkChecks",
+
+JSON.stringify(
+
+checks.map(
+c=>c.checked
+)
+
+)
+
+);
+
+}
+
+
+/* CHECKBOX EVENTS */
+
+checks.forEach(
+
+c=>
+
+c.addEventListener(
+
+"change",
+
+update
+
+)
+
+);
+
+
+/* LOAD SAVED DATA */
+
+function loadSaved(){
+
+try{
+
+const saved =
+JSON.parse(
+
+localStorage.getItem(
+"deepWorkChecks"
+)
+
+);
+
+if(Array.isArray(saved)){
+
+checks.forEach(
+
+(c,i)=>
+
+c.checked =
+!!saved[i]
+
+);
+
+}
+
+}catch(e){}
+
+update();
+
+}
+
+loadSaved();
+
+
+/* RESET */
+
+function resetQuest(){
+
+checks.forEach(
+
+c=>
+c.checked=false
+
+);
+
+update();
+
+}
+
+
+/* ROUND RECT HELPER */
+
+function roundRect(
+
+ctx,
+x,
+y,
+w,
+h,
+r,
+fill=true,
+stroke=false
+
+){
+
+if(w <= 0 || h <= 0)
+return;
+
+r =
+Math.min(
+r,
+w/2,
+h/2
+);
+
+ctx.beginPath();
+
+ctx.moveTo(
+x+r,
+y
+);
+
+ctx.arcTo(
+x+w,
+y,
+x+w,
+y+h,
+r
+);
+
+ctx.arcTo(
+x+w,
+y+h,
+x,
+y+h,
+r
+);
+
+ctx.arcTo(
+x,
+y+h,
+x,
+y,
+r
+);
+
+ctx.arcTo(
+x,
+y,
+x+w,
+y,
+r
+);
+
+ctx.closePath();
+
+if(fill)
+ctx.fill();
+
+if(stroke)
+ctx.stroke();
+
+}
+
+
+/* DOWNLOAD LIVE IMAGE */
+
+function downloadPNG(){
+
+const h =
+getHours();
+
+const rank =
+getRank(h);
+
+const pct =
+Math.min(
+
+100,
+
+Math.round(
+(h / 50) * 100
+)
+
+);
+
+
+/* CANVAS */
+
+const canvas =
+document.createElement(
+"canvas"
+);
+
+canvas.width =
+1400;
+
+canvas.height =
+1800;
+
+
+const ctx =
+canvas.getContext(
+"2d"
+);
+
+
+/* BACKGROUND */
+
+ctx.fillStyle =
+"#05070c";
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+/* HEADER */
+
+const gradient =
+ctx.createLinearGradient(
+0,
+0,
+1400,
+0
+);
+
+gradient.addColorStop(
+0,
+"#0d1731"
+);
+
+gradient.addColorStop(
+1,
+"#11112c"
+);
+
+ctx.fillStyle =
+gradient;
+
+roundRect(
+ctx,
+60,
+60,
+1280,
+320,
+28
+);
+
+
+/* SYSTEM TITLE */
+
+ctx.fillStyle =
+"#45e7ff";
+
+ctx.font =
+"700 24px Arial";
+
+ctx.fillText(
+
+"SYSTEM QUEST • ADVANCED DEEP WORK",
+
+100,
+110
+
+);
+
+
+/* MAIN TITLE */
+
+ctx.fillStyle =
+"#edf4ff";
+
+ctx.font =
+"900 72px Arial";
+
+ctx.fillText(
+
+"50 HOUR LEVEL UP",
+
+100,
+205
+
+);
+
+
+/* SUBTITLE */
+
+ctx.fillStyle =
+"#9fb0cf";
+
+ctx.font =
+"28px Arial";
+
+ctx.fillText(
+
+"5 days × 10 focused hours",
+
+100,
+260
+
+);
+
+
+/* RANK BOX */
+
+ctx.fillStyle =
+"#17130b";
+
+roundRect(
+
+ctx,
+
+1010,
+95,
+
+250,
+220,
+
+22
+
+);
+
+
+ctx.strokeStyle =
+"#6d5d2d";
+
+ctx.lineWidth =
+3;
+
+roundRect(
+
+ctx,
+
+1010,
+95,
+
+250,
+220,
+
+22,
+
+false,
+
+true
+
+);
+
+
+/* RANK LABEL */
+
+ctx.fillStyle =
+"#b8c6dd";
+
+ctx.font =
+"20px Arial";
+
+ctx.fillText(
+
+"CURRENT RANK",
+
+1050,
+135
+
+);
+
+
+/* RANK */
+
+ctx.fillStyle =
+"#ffd86b";
+
+ctx.font =
+"900 96px Arial";
+
+ctx.fillText(
+
+rank,
+
+1080,
+235
+
+);
+
+
+/* HOURS */
+
+ctx.fillStyle =
+"#edf4ff";
+
+ctx.font =
+"22px Arial";
+
+ctx.fillText(
+
+`${h} / 50 HOURS`,
+
+1050,
+285
+
+);
+
+
+/* PROGRESS */
+
+ctx.fillStyle =
+"#8fa4c7";
+
+ctx.font =
+"22px Arial";
+
+ctx.fillText(
+
+`TOTAL PROGRESS: ${pct}%`,
+
+100,
+430
+
+);
+
+
+/* PROGRESS BACKGROUND */
+
+ctx.fillStyle =
+"#0a0f19";
+
+roundRect(
+
+ctx,
+
+100,
+455,
+
+1200,
+28,
+
+14
+
+);
+
+
+/* PROGRESS BAR */
+
+const progressGradient =
+ctx.createLinearGradient(
+100,
+0,
+1300,
+0
+);
+
+progressGradient
+.addColorStop(
+0,
+"#45e7ff"
+);
+
+progressGradient
+.addColorStop(
+1,
+"#8b5cff"
+);
+
+ctx.fillStyle =
+progressGradient;
+
+roundRect(
+
+ctx,
+
+100,
+455,
+
+1200 *
+(pct / 100),
+
+28,
+
+14
+
+);
+
+
+/* DAYS */
+
+const days = [
+
+[
+"DAY 1",
+"AWAKENING"
+],
+
+[
+"DAY 2",
+"RESET I — CLEAN RE-ENTRY"
+],
+
+[
+"DAY 3",
+"BREAKTHROUGH"
+],
+
+[
+"DAY 4",
+"RESET II — STABILIZE"
+],
+
+[
+"DAY 5",
+"MONARCH DAY"
+]
+
+];
+
+
+let y =
+540;
+
+
+days.forEach(
+
+(d,idx)=>{
+
+ctx.fillStyle =
+
+(
+idx === 1 ||
+idx === 3
+)
+
+?
+
+"#0e0d22"
+
+:
+
+"#0a1020";
+
+
+roundRect(
+
+ctx,
+
+80,
+y,
+
+1240,
+180,
+
+20
+
+);
+
+
+/* BORDER */
+
+ctx.strokeStyle =
+"#22445e";
+
+ctx.lineWidth =
+2;
+
+roundRect(
+
+ctx,
+
+80,
+y,
+
+1240,
+180,
+
+20,
+
+false,
+
+true
+
+);
+
+
+/* DAY */
+
+ctx.fillStyle =
+"#edf4ff";
+
+ctx.font =
+"800 30px Arial";
+
+ctx.fillText(
+
+d[0],
+
+110,
+y+45
+
+);
+
+
+/* MODE */
+
+ctx.fillStyle =
+
+(
+idx === 1 ||
+idx === 3
+)
+
+?
+
+"#b79cff"
+
+:
+
+"#45e7ff";
+
+
+ctx.font =
+"700 20px Arial";
+
+ctx.fillText(
+
+d[1],
+
+280,
+y+45
+
+);
+
+
+/* TIME BLOCKS */
+
+const blocks = [
+
+[
+"Morning",
+"5h"
+],
+
+[
+"Afternoon",
+"2h"
+],
+
+[
+"Evening",
+"2h"
+],
+
+[
+"Night",
+"1h + 1h bonus"
+]
+
+];
+
+
+let bx =
+110;
+
+
+blocks.forEach(
+
+(b,j)=>{
+
+ctx.fillStyle =
+"#9fb0cf";
+
+ctx.font =
+"20px Arial";
+
+ctx.fillText(
+
+b[0],
+
+bx,
+y+100
+
+);
+
+
+ctx.fillStyle =
+
+j === 3
+
+?
+
+"#ffd86b"
+
+:
+
+"#edf4ff";
+
+
+ctx.font =
+"700 24px Arial";
+
+ctx.fillText(
+
+b[1],
+
+bx,
+y+135
+
+);
+
+
+bx +=
+300;
+
+});
+
+
+y +=
+205;
+
+});
+
+
+/* RANK SYSTEM */
+
+ctx.fillStyle =
+"#0b1020";
+
+roundRect(
+
+ctx,
+
+80,
+1580,
+
+1240,
+140,
+
+20
+
+);
+
+
+ctx.fillStyle =
+"#45e7ff";
+
+ctx.font =
+"800 24px Arial";
+
+ctx.fillText(
+
+"RANK SYSTEM",
+
+110,
+1618
+
+);
+
+
+const rankList = [
+
+["E","0–4h"],
+
+["D","5–9h"],
+
+["C","10–19h"],
+
+["B","20–29h"],
+
+["A","30–39h"],
+
+["S","40–49h"],
+
+["SS","50h"]
+
+];
+
+
+let rx =
+110;
+
+
+rankList.forEach(
+
+([r,hrs])=>{
+
+
+ctx.fillStyle =
+
+r === rank
+
+?
+
+"#182744"
+
+:
+
+"#080d19";
+
+
+roundRect(
+
+ctx,
+
+rx,
+1640,
+
+145,
+60,
+
+12
+
+);
+
+
+/* ACTIVE RANK */
+
+ctx.fillStyle =
+
+r === rank
+
+?
+
+"#ffd86b"
+
+:
+
+"#edf4ff";
+
+
+ctx.font =
+"800 24px Arial";
+
+ctx.fillText(
+
+r,
+
+rx+18,
+1678
+
+);
+
+
+/* HOURS */
+
+ctx.fillStyle =
+"#9fb0cf";
+
+ctx.font =
+"16px Arial";
+
+ctx.fillText(
+
+hrs,
+
+rx+55,
+1677
+
+);
+
+
+rx +=
+168;
+
+});
+
+
+/* DOWNLOAD */
+
+const a =
+document.createElement(
+"a"
+);
+
+a.download =
+
+`deep-work-rank-${rank}-${h}h.png`;
+
+
+a.href =
+canvas.toDataURL(
+"image/png"
+);
+
+
+document.body.appendChild(
+a
+);
+
+a.click();
+
+a.remove();
+
+}
+
+</script>
+
+</body>
+</html>
